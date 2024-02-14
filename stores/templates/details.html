@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="mt-4">
+    <div class="book">
+        <div>
+            <img class="rounded-md"
+                src="{% static './img/library_books.jpg' %}"
+                alt="book img">
+        </div>
+        <h1 class="text-xl font-semibold">Book title</h1>
+        <p>Book description</p>
+        <span class="">Price: <p class="text-xl font-semibold text-teal-500 inline">$ 100</p></span><br />
+        <button>
+            <a class="inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0"
+                href="#">Borrow</a>
+        </button>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}Library Management System{% endblock %} {% block content %}
+<div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
+    <div
+        class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 bg-white rounded-2xl bg-opacity-70 mx-3">
+        <h1 class="font-bold text-4xl my-4">Welcome to Khushir Library</h1>
+        <span class="leading-normal mb-4 text-justify">
+            <p class="text-2xl font-bold text-teal-500 tracking-widest block">Hi,</p> This is a online book borrow
+            system. Our store has 1 million+ books and 5 million+ regular reader. We prior to regular reader with 20+
+            free books. We have a large number of translated book such as Bengali, French, Arabic and Japanese. We give
+            a free gift book opportunity for the 20+ reader in one week.
+            So, Don't miss the opportunity and touch on Register.
+
+        </span>
+        <div class="flex justify-end w-full">
+            <a href="#"
+                class="bg-blue-900 text-white rounded-md hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Register</a>
+        </div>
+    </div>
+    <div class="w-full lg:w-1/2 lg:py-6 text-center ">
+        <img class="rounded-2xl"
+            src="{% static './img/library_books.jpg' %}"
+            alt="Home image" />
+    </div>
+</div>
+
+{% endblock %}
