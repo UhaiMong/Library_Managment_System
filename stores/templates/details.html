@@ -1,21 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="mt-4">
+    <h1 class="text-4xl font-bold">Details Overview</h1>
     <div class="book">
-        <div>
+        <div class="mx-auto max-w-4xl">
             <img class="rounded-md"
-                src="{% static './img/library_books.jpg' %}"
-                alt="book img">
+                src="{{single_book.image.url}}"
+                alt="{{single_book.title}}">
         </div>
-        <h1 class="text-xl font-semibold">Book title</h1>
-        <p>Book description</p>
-        <span class="">Price: <p class="text-xl font-semibold text-teal-500 inline">$ 100</p></span><br />
+        <h1 class="text-xl font-semibold"> {{single_book.title}} </h1>
+        <p> {{single_book.description}} </p>
+        <span class="">Price: <p class="text-xl font-semibold text-teal-500 inline">$ {{single_book.price}} </p>
+        </span><br />
         <button>
             <a class="inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0"
                 href="#">Borrow</a>
         </button>
+    </div>
+    <div>
+        {% if not reviews %}
+        <h1>No reviews yet.</h1>
+        {% else %}
+        {% for review in reviews %}
+        <div>
+            <span class="text-sm font-light text-gray-600">{{ review.reviewText }}</span>
+            <h2 class="text-md font-semibold italic text-gray-700 text-right"> - {{ review.name }}</h2>
+            <p class="text-right">{{ review.reviewedDate }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="mt-5">
+        <form method="post">
+            <h1 class="text-3xl">Review this book.</h1>
+            {% csrf_token %}
+            {{review_form | crispy}}
+            <button type="submit"
+                class="nline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0">Submit</button>
+        </form>
     </div>
 </div>
 {% endblock %}
