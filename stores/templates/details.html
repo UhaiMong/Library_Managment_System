@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block content %}
 <div class="mt-4">
     <h1 class="text-4xl font-bold">Details Overview</h1>
@@ -37,7 +36,7 @@
         <form method="post">
             <h1 class="text-3xl">Review this book.</h1>
             {% csrf_token %}
-            {{review_form | crispy}}
+            {{review_form.as_p}}
             <button type="submit"
                 class="nline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0">Submit</button>
         </form>
