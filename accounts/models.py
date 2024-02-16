@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .constants import GENDER_TYPE
+from stores.models import BookStore
+from django.utils import timezone
 
 # Create your models here.
 
@@ -26,3 +28,33 @@ class DepositModel(models.Model):
 
     class Meta:
         ordering = ['timestamp']
+
+# Borrow Book report model
+
+
+class BorrowedBook(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(BookStore, on_delete=models.CASCADE)
+    borrowed_date = models.DateField(auto_now_add=True)
+    returned = models.BooleanField(default=False)
+    returned_date = models.DateField(null=True, blank=True)
+
+    @property
+    def is_returned(self):
+        return self.returned
+
+    def returned_book(self):
+        self.returned = True
+        self.returned_date = timezone.now()
+        self.save()
+        return self.book.price
+
+    def __str__(self):
+        return self.book.title
+
+
+class User(models.Model):
+    ...
+
+    def borrowing_history(self):
+        return BorrowedBook.objects.filter(user=self)

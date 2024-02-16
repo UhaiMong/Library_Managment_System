@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import UserDepositAccount, DepositModel
+from .models import UserDepositAccount, DepositModel, BorrowedBook
 
 # Register your models here.
 admin.site.register(UserDepositAccount)
+admin.site.register(BorrowedBook)
 
 
 @admin.register(DepositModel)
