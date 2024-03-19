@@ -15,7 +15,7 @@
         </span><br />
         <button>
             <a class="inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0"
-                href="{% url 'profile' %}">Borrow</a>
+                href="{% url 'borrow' id %}">Borrow</a>
         </button>
     </div>
     <div>
@@ -30,16 +30,6 @@
         </div>
         {% endfor %}
         {% endif %}
-    </div>
-
-    <div class="mt-5">
-        <form method="post">
-            <h1 class="text-3xl">Review this book.</h1>
-            {% csrf_token %}
-            {{review_form.as_p}}
-            <button type="submit"
-                class="nline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0">Submit</button>
-        </form>
     </div>
 </div>
 {% endblock %}

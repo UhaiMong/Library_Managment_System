@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import FormView, TemplateView, CreateView
+from django.views.generic import FormView, TemplateView, CreateView, View
 from .forms import UserRegistrationForm, DepositForm
 from .models import DepositModel, BorrowedBook
 from stores.models import BookStore
@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import get_object_or_404
+from stores.forms import ReviewForm
 
 # Create your views here.
 
@@ -96,29 +98,62 @@ class DepositView(DepositCreationMixin):
 class UserProfileView(TemplateView):
     template_name = 'profile.html'
 
-    def get(self, request, *args, **kwargs):
-        book_id = self.kwargs['book_id']
-        book = BookStore.objects.get(pk=book_id)
-        user = request.user
-        account = user.account
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Filter borrowed books for the logged-in user
+        borrowed_books = BorrowedBook.objects.filter(user=self.request.user)
+        context['borrowed_books'] = borrowed_books
+        return context
 
-        if account.balance >= book.price:
-            # Sufficient balance to borrow the book
-            borrowed_book = BorrowedBook.objects.create(user=user, book=book)
+# Return Book view
+
+
+class ReturnBookView(View):
+    def post(self, request):
+        if request.user.is_authenticated:
+            book_id = request.POST.get('book_id')
+            try:
+                borrowed_book = BorrowedBook.objects.get(
+                    user=request.user, book_id=book_id, returned=False)
+            except BorrowedBook.DoesNotExist:
+                messages.error(request, "This book has already been returned.")
+                return redirect('profile')
+
+            # Mark the book as returned
+            borrowed_book.returned = True
             borrowed_book.save()
 
-            # Update user's account balance
-            account.balance -= book.price
-            account.save()
+            # Add the book price back to the user's account
+            request.user.account.balance += borrowed_book.book.price
+            request.user.account.save()
 
-            # Display success message
             messages.success(
-                request, f"You have successfully borrowed {book.title}. Your new balance is {account.balance} taka.")
-
-            # Redirect to a success page or any other appropriate page
-            return redirect('success-page-url')
+                request, f"The book \"{borrowed_book.book.title}\" has been returned successfully.")
+            return redirect('profile')
         else:
-            # Insufficient balance
-            messages.error(
-                request, "You don't have enough balance to borrow this book.")
-            return redirect('insufficient-balance-page-url')
+            return redirect('login')
+
+# Review the book
+
+
+class ReviewBookView(TemplateView):
+    template_name = 'review_book.html'
+
+    def post(self, request, *args, **kwargs):
+        # Handle POST request to post a new review
+        review_form = ReviewForm(data=request.POST)
+        # context = super().get_context_data(**kwargs)
+        book_id = kwargs.get('book_id')
+        print(book_id)
+        single_book = get_object_or_404(BookStore, id=book_id)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.book = single_book
+            new_review.save()
+            # Redirect to the profile page after posting the review
+            return redirect('stores')
+        else:
+            # Invalid form, handle appropriately
+            context = self.get_context_data()
+            context['review_form'] = review_form
+            return self.render_to_response(context)

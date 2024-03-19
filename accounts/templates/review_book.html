@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}
+Review Book
+{% endblock %}
+{% block content %}
+<div style="height: 100vh;">
+    <div class="mt-5 w-full h-auto">
+        <form method="post"
+            class="px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2"
+                    for="name">
+                    Name
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline"
+                    name="name"
+                    id="name"
+                    type="text"
+                    required
+                    placeholder="Name">
+            </div>
+            {% if form.name.errors %} {% for error in form.name.errors %}
+            <p class="text-red-600 text-sm italic pb-2">{{ error }}</p>
+            {% endfor %} {% endif %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2"
+                    for="reviewText">
+                    Review Message
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline"
+                    name="reviewText"
+                    id="reviewText"
+                    type="text"
+                    required
+                    placeholder="Review Message">
+            </div>
+            {% if form.reviewText.errors %} {% for error in form.reviewText.errors %}
+            <p class="text-red-600 text-sm italic pb-2">{{ error }}</p>
+            {% endfor %} {% endif %}
+            <div class="flex w-full justify-start">
+                <button
+                    class="mx-2 inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-700 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0">
+                    Review
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

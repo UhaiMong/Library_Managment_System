@@ -12,9 +12,9 @@ class DepositAdmin(admin.ModelAdmin):
                     'balance_after_deposit', 'timestamp']
 
     def get_account_username(self, obj):
-        return obj.account.username
+        return obj.account.user
 
-    get_account_username.short_description = 'Account Username'
+    get_account_username.short_description = 'Account Holder'
 
     def save_model(self, request, obj, form, change):
         obj.account.balance += obj.amount

@@ -2,35 +2,38 @@
 {% load static %}
 
 {% block content %}
-<div class="flex items-start mt-4">
-    <div class="category mr-4">
-        <h1 class="text-xl font-semibold italic">Select Category</h1>
-        <ul>
-            {% for category in categories %}
-            <li><a href="{% url 'category_book' category.slug %}">{{ category.cat }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="flex-1 ">
-        <h1 class="text-2xl font-bold text-gray-500 items-start"> {{books | length}} books found in library </h1>
-        <div class="stores grid grid-cols-1 lg:grid grid-cols-4 md:grid grid-cols-3 gap-x-8 gap-y-4">
-            {% for book in books %}
-            <div class="book">
-                <div class="w-40 h-64">
-                    <img class="rounded-md w-full h-full object-cover"
-                        src="{{book.image.url}}"
-                        alt="{{book.title}}">
+<div class="h-full">
+    <div class="flex items-start mt-4 h-auto">
+        <div class="category mr-4">
+            <h1 class="text-xl font-semibold italic">Select Category</h1>
+            <ul>
+                {% for category in categories %}
+                <li><a href="{% url 'category_book' category.slug %}">{{ category.cat }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="flex-1 ">
+            <h1 class="text-2xl font-bold text-gray-500 items-start"> {{books | length}} books found in library </h1>
+            <div class="stores grid grid-cols-1 lg:grid grid-cols-4 md:grid grid-cols-3 gap-x-8 gap-y-4">
+                {% for book in books %}
+                <div class="book">
+                    <div class="w-40 h-64">
+                        <img class="rounded-md w-full h-full object-cover"
+                            src="{{book.image.url}}"
+                            alt="{{book.title}}">
+                    </div>
+                    <h1 class="text-xl font-semibold"> {{book.title}} </h1>
+                    <p> {{book.description | truncatechars:50}} </p>
+                    <span class="">Price: <p class="text-xl font-semibold text-teal-500 inline">$ {{book.price}} </p>
+                    </span><br />
+                    <button>
+                        <a class="inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0"
+                            href="{% url 'details' book.id %}">Details</a>
+                    </button>
                 </div>
-                <h1 class="text-xl font-semibold"> {{book.title}} </h1>
-                <p> {{book.description | truncatechars:50}} </p>
-                <span class="">Price: <p class="text-xl font-semibold text-teal-500 inline">$ {{book.price}} </p>
-                </span><br />
-                <button>
-                    <a class="inline-block font-medium text-sm px-4 py-2 leading-none bg-teal-500 rounded text-white border-white hover:border-transparent hover:text-dark hover:bg-red-700 mt-4 lg:mt-0"
-                        href="{% url 'details' book.id %}">Details</a>
-                </button>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
