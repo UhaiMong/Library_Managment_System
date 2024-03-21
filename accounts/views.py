@@ -34,13 +34,20 @@ class UserLoginView(LoginView):
         return reverse_lazy('home')
 
 
-class UserLogoutView(LogoutView):
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            pass
-        return super().dispatch(request, *args, **kwargs)
+# class UserLogoutView(LogoutView):
+#     def dispatch(self, request, *args, **kwargs):
+#         if request.user.is_authenticated:
+#             pass
+#         return super().dispatch(request, *args, **kwargs)
 
-    next_page = reverse_lazy('home')
+#     next_page = reverse_lazy('home')
+
+
+class UserLogoutView(LogoutView):
+    def get_success_url(self):
+        if self.request.user.is_authenticated:
+            logout(self.request)
+        return reverse_lazy('home')
 
 # email sending for deposit amount
 
